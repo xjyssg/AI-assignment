@@ -113,19 +113,26 @@ def depth_first_tree_search(problem):
     "Search the deepest nodes in the search tree first. [p 74]"
     return tree_search(problem, Stack())
 
+
 def graph_search(problem, fringe):
     """Search through the successors of a problem to find a goal.
     The argument fringe should be an empty queue.
     If two paths reach a state, only use the best one. [Fig. 3.18]"""
+    
+    global sum1
+    sum1 = 0
     closed = {}
     fringe.append(Node(problem.initial))
     while fringe:
         node = fringe.pop()
-        if problem.goal_test(node.state): 
+        if problem.goal_test(node.state):
+
             return node
         if node.state not in closed:
+            sum1 += 1
+            print(sum1)
             closed[node.state] = True
-            print(len(fringe))
+            
             fringe.extend(node.expand(problem))
     return None
 

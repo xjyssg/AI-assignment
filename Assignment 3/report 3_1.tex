@@ -1,0 +1,104 @@
+\documentclass[12pt, a4paper]{report}
+\usepackage{graphicx}
+\usepackage[super]{nth}
+\usepackage{color} % Colour control
+\definecolor{db}{cmyk}{1,0.5,0,0.5}
+\usepackage[Glenn]{fncychap}
+\usepackage{enumerate}
+\usepackage{diagbox}
+
+\setlength{\parindent}{0pt}
+
+\title{
+    \vspace{0.5cm} \textcolor{db}{\textsc{LINGI2261: Artificial Intelligence}} \\
+    \vspace{0.5 cm} \rule{10 cm}{0.5pt} \\
+    \vspace{0.5 cm} \Large{Assignment 3: Project: Adversarial Search} \\
+    \vspace{3 cm}
+    \begin{flushright}
+        \large
+        \textbf{Groupe 81} \\
+        Sanae \textsc{Abdelouassaa} \\
+        Jiayue \textsc{Xue} \\     
+    \end{flushright}
+    \vspace{0.5 cm}
+}
+\begin{document}
+\begin{figure}[t]
+    \includegraphics[scale=1.0]{logo.png}
+ \end{figure}   
+\begin{figure}[t]
+    \hspace{10 cm} \includegraphics[scale=0.5]{epl-logo.jpg}
+\end{figure}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Alpha-Beta search}
+
+\section{Question 1:}
+Perform the MiniMax algorithm on the tree in Figure 1, i.e. put a value to each node. Circle the move the root player should do.
+
+\subsection{Answer:}
+- See Figure \ref{fig1}: MiniMax .
+
+   \begin{figure}[h]
+      \caption{ MiniMax }
+      \label{fig1}
+         \includegraphics[scale=0.5]{MiniMax.png}
+   \end{figure} 
+   
+\section{Question 2:}
+Perform the Alpha-Beta algorithm on the tree in Figure 2. At each non terminal node, put the successive values of $\alpha$ and $\beta$. Cross out the arcs reaching non visited nodes. Assume a left-to-right node expansion.
+
+\subsection{Answer:}
+- See Figure \ref{fig2}: Alpha-Beta left to right expansion .
+
+   \begin{figure}[h]
+       \caption{Alpha-Beta left to right expansion}
+       \label{fig2}
+          \includegraphics[scale=0.5]{AlphaBeta.png}
+    \end{figure}
+    
+\section{Question 3:}
+Do the same, assuming a right-to-left node expansion instead (Figure3).
+
+\subsection{Answer:}
+- See Figure \ref{fig3}: Alpha-Beta right to left expansion .
+
+    \begin{figure}[h]
+        \caption{Alpha-Beta right to left expansion}
+        \label{fig3}
+         \includegraphics[scale=0.5]{Alphabeta1.png}
+    \end{figure}
+    
+\section{Question 4:}
+Can the nodes be ordered in such a way that Alpha-Beta pruning can cut off more branches (in a left-to-right node expansion)? If no, explain why; if yes, give the new ordering and the resulting new pruning.
+
+\subsection{Answer:}
+- Yes, there is another way using Alpha-Beta pruning with different ordered nodes.
+\newline
+- See Figure \ref{fig4}: Alpha-Beta right to left expansion with new ordering .
+\newline
+- The new ordered nodes are printed with a different color and we can see that we cut off one more branch than the ones cut off with the given tree.  
+
+    \begin{figure}[h]
+        \caption{Alpha-Beta right to left expansion with new ordering}
+        \label{fig4}
+         \includegraphics[scale=0.5]{q4.png}
+    \end{figure}
+    
+\section{Question 5:}
+How does Alpha-Beta need to be modified for games with more than two players?
+
+\subsection{Answer:}
+When playing a game with more than two players, we need to replace the single value for each node with a vector of values. For example, in a three-player game with players $A$, $B$, and $C$, a vector $<v_A, v_B, v_C>$ is associated with each node. 
+
+For terminal states, this vector gives the utility of the state from each player’s viewpoint. 
+For non-terminal states, each current player $p$ chooses the action among all the possible actions which maximizes the value corresponding to $p$ in the vector. 
+
+Note that multi-player games usually involve alliances, whether formal or informal, among the players. 
+
+
+\end{document}
+ 

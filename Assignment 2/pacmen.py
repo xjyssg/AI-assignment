@@ -2,6 +2,7 @@
 '''NAMES OF THE AUTHOR(S): Gael Aglin <gael.aglin@uclouvain.be>, Francois Aubry <francois.aubry@uclouvain.be>'''
 from search import *
 import copy
+import time
 
 
 #################
@@ -230,7 +231,7 @@ def heuristic(node):
                     min_c = c_index
         h += min_dis
         candidates.remove(candidates[min_c])
-        candidates.append(foods[min_f])
+        # candidates.append(foods[min_f])
         foods.remove(foods[min_f])
         # print(candidates)
         # print(foods)
@@ -250,21 +251,34 @@ init_state = State(grid_init)
 # print(init_state)
 # print(init_state.nbr)
 # print(init_state.nbc)
-
 for i in range(init_state.nbr):
     for j in range(init_state.nbc):
         if (init_state.grid[i][j] == '$'):
             init_state.grid[i][j] = '1'
-
 # print(init_state)
 problem = Pacmen(init_state)
+
+# time1 = 2
+# 
+# 
+# if time1 == 1:
+# 	tic = time.clock()
+# 	node = astar_graph_search(problem, heuristic)
+# 	toc = time.clock()
+# 	print(toc - tic)
+# else:
+# 
+# 	tic = time.clock()
+# 	node = breadth_first_graph_search(problem)
+# 	toc = time.clock()
+# 	print(toc - tic)
+# 	print('wow')
 
 node = astar_graph_search(problem, heuristic)
 
 # example of print
 path = node.path()
 path.reverse()
-
 print('Number of moves: ' + str(node.depth))
 
 
@@ -283,4 +297,3 @@ for n in path:
                     (n.state.grid[i][j] == '3'):
                 n.state.grid[i][j] = '$'
     print(n.state)  # assuming that the __str__ function of state outputs the correct format
-    print()

@@ -1,0 +1,144 @@
+\documentclass[12pt, a4paper]{report}
+\usepackage{graphicx}
+\usepackage[super]{nth}
+\usepackage{color} % Colour control
+\definecolor{db}{cmyk}{1,0.5,0,0.5}
+\usepackage[Glenn]{fncychap}
+\usepackage{enumerate}
+\usepackage{diagbox}
+
+\setlength{\parindent}{0pt}
+
+\title{
+    \vspace{0.5cm} \textcolor{db}{\textsc{LINGI2261: Artificial Intelligence}} \\
+    \vspace{0.5 cm} \rule{10 cm}{0.5pt} \\
+    \vspace{0.5 cm} \Large{Assignment 3: Project: Adversarial Search (Part2)} \\
+    \vspace{3 cm}
+    \begin{flushright}
+        \large
+        \textbf{Groupe 81} \\
+        Sanae \textsc{Abdelouassaa} \\
+        Jiayue \textsc{Xue} \\     
+    \end{flushright}
+    \vspace{0.5 cm}
+}
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\chapter{Propositional Logic}
+\section{Models and Logical Connectives}
+Directive: For each sentence, give its number of valid interpretations, i.e. the number of times the sentence is true (considering for each sentence all the proposition variables A, B, C and D).
+
+Question 1:
+\begin{equation}
+    (\neg A \vee C) \wedge (\neg B \vee C)
+\end{equation}
+Answer:
+\begin{table}[h]
+    \centering
+    \caption{Question 1}
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    A & B & C & $\neg A \vee C$ & $\neg B \vee C$ & Result \\
+    \hline
+    true & true & true & true & true & true \\
+    \hline
+    true & true & false & false & false & false \\
+    \hline
+    true & false & true & true & true & true \\
+    \hline
+    true & false & false & false & true & false \\
+    \hline
+    false & true & true & true & true & true \\
+    \hline
+    false & true & false & true & false & false \\
+    \hline
+    false & false & true & true & true & true \\
+    \hline
+    false & false & false & true & true & true \\
+    \hline
+    \end{tabular}
+\end{table}
+
+Question 2:
+\begin{equation}
+    (C \Rightarrow \neg A) \wedge \neg (B \vee C)
+\end{equation}
+Answer:
+\begin{table}[h]
+    \centering
+    \caption{Question 2}
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    A & B & C & $C \Rightarrow \neg A$ & $B \vee C$ & Result \\
+    \hline
+    true & true & true & false & true & false \\
+    \hline
+    true & true & false & true & true & false \\
+    \hline
+    true & false & true & false & true & false \\
+    \hline
+    true & false & false & true & false & true \\
+    \hline
+    false & true & true & true & true & false \\
+    \hline
+    false & true & false & true & true & false \\
+    \hline
+    false & false & true & true & true & false \\
+    \hline
+    false & false & false & true & false & true \\
+    \hline
+    \end{tabular}
+\end{table}
+
+Question 3:
+\begin{equation}
+    (\neg A \vee B) \wedge \neg (B \Rightarrow \neg C) \wedge \neg (\neg D \Rightarrow A)
+\end{equation}
+Answer:
+\begin{table}[h]
+    \centering
+    \caption{Question 3}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    A & B & C & D & $\neg A \vee B$ & $B \Rightarrow \neg C$ & $\neg D \Rightarrow A$ & Result \\
+    \hline
+    true & true & true & true & true & false & true & false \\
+    \hline
+    true & true & true & false & true & false & true & false \\
+    \hline
+    true & true & false & true & true & true & true & false \\
+    \hline
+    true & true & false & false & true & true & true & false \\
+    \hline
+    true & false & true & true & false & true & true & false \\
+    \hline
+    true & false & true & false & false & true & true & false \\
+    \hline
+    true & false & false & true & false & true & true & false \\
+    \hline
+    true & false & false & false & false & true & true & false \\
+    \hline
+    false & true & true & true & true & false & true & false \\
+    \hline
+    false & true & true & false & true & false & false & true \\
+    \hline
+    false & true & false & true & true & true & true & false \\
+    \hline
+    false & true & false & false & true & true & false & false \\
+    \hline
+    false & false & true & true & true & true & true & false \\
+    \hline
+    false & false & true & false & true & true & false & false \\
+    \hline
+    false & false & false & true & true & true & true & false \\
+    \hline
+    false & false & false & false & true & true & false & false \\
+    \hline
+    \end{tabular}
+\end{table}
+
+
+\end{document}
