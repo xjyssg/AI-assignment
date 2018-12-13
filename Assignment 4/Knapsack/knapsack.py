@@ -148,7 +148,7 @@ stepLimit = 100
 
 # tech = int(sys.argv[2])
 
-tech = 0
+tech = 1
 
 if(tech == 0):
 	node = random_walk(knap,stepLimit)
