@@ -6,6 +6,8 @@ import sys
 import os
 import copy
 import heapq
+import time
+
 
 class Knapsack(Problem):
 
@@ -175,7 +177,8 @@ def randomized_maxvalue(problem, limit=100, callback=None):
             node_index = value_list.index(value)
             node_list.append(successor_list[node_index])
         current = random.choice(node_list)
-        best = current
+        if current.value() > best.value():
+            best = current
     return best
 
 
@@ -187,32 +190,62 @@ def randomized_maxvalue(problem, limit=100, callback=None):
 
 a = 12
 
-if a == 1:
-    if(len(sys.argv) <=2 ):
-        print("Usage: "+sys.argv[0]+" instance_file technique_value (0: randomWalk,1: maxValue,2: randomizedMaxvalue)")
-        exit(-1)
-    knap = Knapsack(sys.argv[1])
-    tech = int(sys.argv[2])
-else:
+# if a == 1:
+#     if(len(sys.argv) <=2 ):
+#         print("Usage: "+sys.argv[0]+" instance_file technique_value (0: randomWalk,1: maxValue,2: randomizedMaxvalue)")
+#         exit(-1)
+#     knap = Knapsack(sys.argv[1])
+#     tech = int(sys.argv[2])
+# else:
+
+for name in range(1, 11):
     folder = 'knapsack_instances'
-    file = 'knapsack9.txt'
+    file = 'knapsack' + str(name) + '.txt'
+    print('#####')
+    print('instance', file)
     path = os.path.join(folder, file)
     knap = Knapsack(path)
-    tech = 1
+    for tech in range(3):
+        # setting parameter
+        stepLimit = 100
 
-
-# setting parameter
-stepLimit = 100
-if(tech == 0):
-    node = random_walk(knap,stepLimit)
-elif(tech == 1):
-    node = maxvalue(knap,stepLimit)
-elif(tech == 2):
-    node = randomized_maxvalue(knap,stepLimit)
-
-
-state = node.state
-print("weight: " + str(state['weight']) + " utility: " + str(state['utility']))
-print("Items: " + str([x + 1 for x in state['items']]))
-print("Capacity: " + str(knap.capacity))
-print("STEP: "+str(node.step))
+        if(tech == 0):
+            tic = time.time()
+            best_node = random_walk(knap,stepLimit)
+            toc = time.time()
+            result_time = toc - tic
+        elif(tech == 1):
+            total_time = 0
+            best_uti = 0
+            best_node = 0
+            for _ in range(10):
+                tic = time.time()
+                node = maxvalue(knap,stepLimit)
+                toc = time.time()
+                total_time += toc - tic
+                state = node.state
+                if state['utility'] > best_uti:
+                    best_uti = state['utility']
+                    best_node = node
+            result_time = total_time / 10
+        elif(tech == 2):
+            total_time = 0
+            best_uti = 0
+            best_node = 0
+            for _ in range(10):
+                tic = time.time()
+                node = randomized_maxvalue(knap,stepLimit)
+                toc = time.time()
+                total_time += toc - tic
+                state = node.state
+                if state['utility'] > best_uti:
+                    best_uti = state['utility']
+                    best_node = node
+            result_time = total_time / 10
+        
+        print('tech: ', tech, 'time: ', result_time)
+        state = best_node.state
+        print("weight: " + str(state['weight']) + " utility: " + str(state['utility']))
+    # print("Items: " + str([x + 1 for x in state['items']]))
+    # print("Capacity: " + str(knap.capacity))
+        print("STEP: "+str(best_node.step))

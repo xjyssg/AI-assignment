@@ -12,7 +12,7 @@
 \title{
     \vspace{0.5cm} \textcolor{db}{\textsc{LINGI2261: Artificial Intelligence}} \\
     \vspace{0.5 cm} \rule{10 cm}{0.5pt} \\
-    \vspace{0.5 cm} \Large{Assignment 3: Project: Adversarial Search (Part2)} \\
+    \vspace{0.5 cm} \Large{Assignment 4: Local Search and Propositional Logic} \\
     \vspace{3 cm}
     \begin{flushright}
         \large
@@ -24,9 +24,74 @@
 }
 \begin{document}
 
+\begin{figure}[t]
+    \includegraphics[scale=0.8]{logo.png}
+ \end{figure}
+
+\begin{figure}[t]
+    \hspace{10 cm} \includegraphics[scale=0.3]{epl-logo.jpg}
+\end{figure}
+
 \maketitle
 
 \tableofcontents
+
+\chapter{The Knapsack Problem}
+
+\section{Question 1}
+Formulate the Knapsack problem as a Local Search problem :
+\vspace{0.5 cm}
+\par Answer:
+\begin{enumerate}
+    \item Problem : The knapsack problem gives a set of items. Each item is labeled by a specific weight and a utility. As long as the total weight never exceed the total capacity, the aim is to put items in the package so that the final utility is as high as possible.  
+    \item Cost function : defines the final numeric value for a game that ends in terminal state which mean the different items that we can regroup them and leads us to the terminal state where we satisfy the constraints.
+    \item Feasible solutions:  to solve the knapsack problem we should to determine the possible number of items we could include in a collection so that the total weight is less than or equal to a given limit and the total value is as large as possible.
+    \item Optimal solutions : are also a feasible solutions where the objective function reaches its maximum or minimum value.
+    
+\end{enumerate}
+\section{Question 2}
+Describe how you construct your initial solution and how your successor function works
+\par Answer:
+To construct the initial solution, we create a dictionary, in which there are three keys: 'items', 'weight' and 'utility' to represent all the necessary aspects of the knapsack problem. To be more concrete, the 'items' is an empty list. Both 'weight' and 'utility' is initialized as zero.
+
+Our successor function takes the current state as the input and  return a sequence of (action, state) pairs reachable from this state. There two main step in the successor function.The first step is to add one item into the package. There are some rules to follow: 
+\begin{enumerate}
+    \item the total weight never exceed the capacity
+    \item the added item never conflict with the items existing in the package
+    \item the added item never repeat the items existing in the package
+\end{enumerate}
+
+The second step is to remove one item from the package so that we can remove the worst item and create more space for more promising items.
+
+
+\section{Question 3}
+\par Answer:
+
+\section{Question 4}
+What is the best strategy?
+
+Answer: \\
+The best strategy is randomized maxvalue. \\
+
+Why do you think the best strategy beats the other ones?
+
+Answer: \\
+The randomized maxvalue strategy chooses the action from a list of promising actions, which takes both optimum and randomness into account. Thus, this strategy has more probability to reach the optimal solution. \\
+
+What are the limitations of each strategy in terms of diversification and intensification?
+
+Answer: \\
+MaxValue : In terms of intensification, it prefers choosing the same branch to go deeper rather than trying to reach other successors. That's why it will take a feasible solution (local optimum) but not the optimal one.
+
+Randomized Maxvalue : As we mention before, this strategy has bigger chances to avoid local optimum because it introduces randomness. \\
+
+What is the behavior of the different techniques when they fall in a local optimum?
+
+Answer: \\
+For the MAXVALUE function, if it falls in a local optimum, it will be stuck there because this is the only solution and there is no other possibilities. 
+
+So for the RANDOMIZED MAXVALUE function, it has more possibilities to avoid to be stuck in the local optimum and to find another solution because the randomness enables it to switch to another direction.
+
 \chapter{Propositional Logic}
 \section{Models and Logical Connectives}
 Directive: For each sentence, give its number of valid interpretations, i.e. the number of times the sentence is true (considering for each sentence all the proposition variables A, B, C and D).
@@ -148,11 +213,81 @@ Question 1: Explain how you can express this problem with propositional logic. W
 Answer:
 In the graph coloring problem, there are two constraints:
 \begin{enumerate}
-    \item 
-
+    \item Every node $i$ is assigned exactly one color.
+    \item For every edge, the two connected nodes $m$ and $n$ have different colors.
 \end{enumerate}
+
+For the convenience of description, we illustrate our idea in the condition of $3$ colors. Our idea can be naturally extended to the condition of $k$ colors.
+
+To translate the first constraint into propositional logic, we write the following statements:
+\begin{equation}
+    \label{con1.1}
+    X_{iA} \Leftrightarrow \neg X_{iB} \wedge \neg X_{iC}
+\end{equation}
+\begin{equation}
+    \label{con1.2}
+    X_{iB} \Leftrightarrow \neg X_{iA} \wedge \neg X_{iC}
+\end{equation}
+\begin{equation}
+    \label{con1.3}
+    X_{iC} \Leftrightarrow \neg X_{iA} \wedge \neg X_{iB}
+\end{equation}
+
+
+To translate the second constraint into propositional logic, we write the following statements:
+\begin{equation}
+    \label{con2.1}
+    X_{mA} \Rightarrow \neg X_{nA}
+\end{equation}
+\begin{equation}
+    \label{con2.2}
+    X_{mB} \Rightarrow \neg X_{nB}
+\end{equation}
+\begin{equation}
+    \label{con2.3}
+    X_{mC} \Rightarrow \neg X_{nC}
+\end{equation}
+
+
+
 Question 2: Translate your model into Conjunctive Normal Form (CNF) and write it in your report.
 Answer:
+
+To translate Equation \ref{con1.1} into Conjunctive Normal Form, we write the following statements:
+\begin{equation}
+    (X_{iA} \Rightarrow (\neg X_{iB} \wedge \neg X_{iC})) \wedge ((\neg X_{iB} \wedge \neg X_{iC}) \Rightarrow X_{iA} )
+\end{equation}
+
+\begin{equation}
+    (\neg X_{iA} \vee (\neg X_{iB} \wedge \neg X_{iC})) \wedge (\neg (\neg X_{iB} \wedge \neg X_{iC}) \vee X_{iA})
+\end{equation}
+
+\begin{equation}
+    (\neg X_{iA} \vee \neg X_{iB}) \wedge (\neg X_{iA} \vee \neg X_{iC}) \wedge (X_{iA} \vee X_{iB} \vee X_{iC})
+\end{equation}
+
+The same rules can be applied to Equation \ref{con1.2}, \ref{con1.3}, we conclude:
+\begin{equation}
+    (\neg X_{iB} \vee \neg X_{iA}) \wedge (\neg X_{iB} \vee \neg X_{iC}) \wedge (X_{iB} \vee X_{iA} \vee X_{iC})
+\end{equation}
+\begin{equation}
+    (\neg X_{iC} \vee \neg X_{iA}) \wedge (\neg X_{iC} \vee \neg X_{iB}) \wedge (X_{iC} \vee X_{iA} \vee X_{iB})
+\end{equation}
+
+To translate the Equation \ref{con2.1} into Conjunctive Normal Form, we write the following statement:
+\begin{equation}
+    \neg X_{mA} \vee \neg X_{nA}
+\end{equation}
+
+The same rules can be applied to Equation \ref{con2.2}, \ref{con2.3}, we conclude:
+\begin{equation}
+    \neg X_{mB} \vee \neg X_{nB}
+\end{equation}
+\begin{equation}
+    \neg X_{mC} \vee \neg X_{nC}
+\end{equation}
+
+
 
 
 \end{document}
