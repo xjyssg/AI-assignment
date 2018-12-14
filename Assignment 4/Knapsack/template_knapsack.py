@@ -45,14 +45,22 @@ class Knapsack(Problem):
 
     def successor(self,state):
         successor_list = []
-        if state['items'] == []:
+        value_list = []
+        # add item
+        if (state['items'] == []):
             # no items in the bag
             for index in range(self.nItems):
-                new_state = copy.deepcopy(state)
-                new_state['items'].append(index)
-                new_state['weight'] += self.itemWeight[index]
-                new_state['utility'] += self.itemUtil[index]
-                successor_list.append((0, new_state))
+                if (state['weight'] + self.itemWeight[index]) <= self.capacity:
+                    new_state = copy.deepcopy(state)
+                    new_state['items'].append(index)
+                    new_state['weight'] += self.itemWeight[index]
+                    new_state['utility'] += self.itemUtil[index]
+
+                    # value_list.append(self.itemUtil[index] / self.capacity)
+                    # value_list.append(new_state['utility'] / new_state['weight'])
+                    value_list.append(self.itemUtil[index] / self.itemWeight[index])
+
+                    successor_list.append((0, new_state))
         else:
             # some items in the bag
             conflict_list = []
@@ -71,17 +79,40 @@ class Knapsack(Problem):
                     new_state['items'].append(index)
                     new_state['weight'] += self.itemWeight[index]
                     new_state['utility'] += self.itemUtil[index]
+
+                    # value_list.append(self.itemUtil[index] / self.capacity)
+                    # value_list.append(new_state['utility'] / new_state['weight'])
+                    value_list.append(self.itemUtil[index] / self.itemWeight[index])
+
                     successor_list.append((0, new_state))
-                    # print('####', new_state['items'])
-        if successor_list == []:
+
+        # remove item
+        # if (len(state['items']) > 1) and (state['weight'] >=  0.9 * self.capacity):
+        if len(successor_list) == 0:
+            for item_index in range(len(state['items'])):
+                item = state['items'][item_index]
+                new_state = copy.deepcopy(state)
+                new_state['items'].remove(item)
+                new_state['weight'] -= self.itemWeight[item]
+                new_state['utility'] -= self.itemUtil[item]
+                # if (new_state['utility'] / new_state['weight']) >= ((state['utility'] / state['weight'])):
+
+                # value_list.append(((self.itemUtil[item]) / 2) / self.capacity)
+                value_list.append(1 / (new_state['utility'] / new_state['weight']))
+                # value_list.append(1 / self.itemUtil[item] / self.itemWeight[item])
+
+                successor_list.append((0, new_state))
+        
+        self.value_list = value_list
+        if (successor_list == []):# or (length1 == length2):
             successor_list.append((0, state))
+            self.value_list = [0]
         generator = (item for item in successor_list if item)
-        # print(successor_list)
         return generator
 
 
     def value(self, state):
-        return state['utility'] / state['weight']
+        return state['utility'] # / state['weight'] # + 0.2 * (self.capacity - state['weight']) / state['weight']
 
     def getUtility(self,state):
         """
@@ -108,7 +139,15 @@ def maxvalue(problem, limit=100, callback=None):
     for step in range(limit):
         if callback is not None:
             callback(current)
-        current = random.choice(list(current.expand()))
+        successor_list = list(current.expand())
+        # value_list = [successor.value() for successor in successor_list]
+        value_list = problem.value_list
+        max_value = max(value_list)
+        node_list = []
+        for index in range(len(value_list)):
+            if value_list[index] == max_value:
+                node_list.append(successor_list[index])
+        current = random.choice(node_list)
         if current.value() > best.value():
             best = current
     return best
@@ -121,7 +160,9 @@ def randomized_maxvalue(problem, limit=100, callback=None):
         if callback is not None:
             callback(current)
         successor_list = list(current.expand())
-        value_list = [successor.value() for successor in successor_list]
+        # value_list = [successor.value() for successor in successor_list]
+        value_list = problem.value_list
+        # print(value_list)
         if len(value_list) < 5:
             parameter = len(value_list)
         else:
@@ -144,23 +185,21 @@ def randomized_maxvalue(problem, limit=100, callback=None):
 #       Launch      #
 #####################
 
-if(len(sys.argv) <=2 ):
-	print("Usage: "+sys.argv[0]+" instance_file technique_value (0: randomWalk,1: maxValue,2: randomizedMaxvalue)")
-	exit(-1)
-knap = Knapsack(sys.argv[1])
-tech = int(sys.argv[2])
+a = 12
 
-# folder = 'knapsack_instances'
-# file = 'knapsack2.txt'
-# path = os.path.join(folder, file)
-# knap = Knapsack(path)
-# tech = 2
+if a == 1:
+    if(len(sys.argv) <=2 ):
+        print("Usage: "+sys.argv[0]+" instance_file technique_value (0: randomWalk,1: maxValue,2: randomizedMaxvalue)")
+        exit(-1)
+    knap = Knapsack(sys.argv[1])
+    tech = int(sys.argv[2])
+else:
+    folder = 'knapsack_instances'
+    file = 'knapsack9.txt'
+    path = os.path.join(folder, file)
+    knap = Knapsack(path)
+    tech = 1
 
-# print(knap.nItems)
-# print(knap.itemWeight[1])
-# print(knap.itemUtil[1])
-# print(type(knap.conflicts[13]))
-# print(knap.initial)
 
 # setting parameter
 stepLimit = 100
@@ -177,11 +216,3 @@ print("weight: " + str(state['weight']) + " utility: " + str(state['utility']))
 print("Items: " + str([x + 1 for x in state['items']]))
 print("Capacity: " + str(knap.capacity))
 print("STEP: "+str(node.step))
-
-# conflict_list = []
-# for item_index in range(len(state['items'])):
-#     item = state['items'][item_index]
-#     # print('current item', item)
-#     for j in range(len(knap.conflicts[item])):
-#         conflict_list.append(knap.conflicts[item][j])
-# print(conflict_list)
